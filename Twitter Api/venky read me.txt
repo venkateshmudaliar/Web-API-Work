@@ -1,0 +1,11 @@
+simple working demo
+
+it signs into twitter account
+shows name,profile pic and retrives yout tweets
+uses twitterapiexhange
+
+works perfectly
+
+can take any link from twitter api and REQUEST IF FOR JSON DATA
+
+contains methods to display data FROM JSON DATA RECEIVED
