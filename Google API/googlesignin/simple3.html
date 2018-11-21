@@ -1,0 +1,63 @@
+<html>
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="utf-8" http-equiv="encoding">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script src="https://apis.google.com/js/platform.js" async defer></script>
+	<meta name="google-signin-client_id" content="246657310252-fr4r7felp6odth7almfcuo2t8pttf1fl.apps.googleusercontent.com">
+<head>
+</head>
+<body>
+	<div class="g-signin2" data-onsuccess="onSignIn"></div>
+
+<hr>
+
+<div>
+        <img id="user-thumbnail">
+        <span id="user-name"></span><br>
+        <span id="user-email"></span>
+      </div>
+
+<hr>
+
+	<a href="#" onclick="signOut();">Sign out</a>
+
+</body>
+<script type="text/javascript">
+	function onSignIn(googleUser) {
+   var id_token = googleUser.getAuthResponse().id_token;
+
+
+	var xhr = new XMLHttpRequest();
+xhr.open('POST', 'https://www.googleapis.com/oauth2/v3/tokeninfo?id_token='+id_token);
+//xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+xhr.onload = function() {
+  console.log(xhr.responseText);
+  var parsed = JSON.parse(xhr.responseText);
+
+  var name=parsed.name;
+  var profilepic=parsed.picture;
+  var email=parsed.email;
+
+ 
+  $('#user-name').text(name);
+ $('#user-thumbnail').attr('src',profilepic);
+ $('#user-email').text(email);
+};
+xhr.send('idtoken=' + id_token);
+
+ 
+}
+
+function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+     
+      $('#user-name').text("Signed Out");
+      $('#user-thumbnail').removeAttr('src');
+
+ 		$('#user-email').empty();
+    });
+  }
+</script>
+</html>

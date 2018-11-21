@@ -1,0 +1,54 @@
+<html>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script src="https://apis.google.com/js/platform.js" async defer></script>
+	<meta name="google-signin-client_id" content="246657310252-fr4r7felp6odth7almfcuo2t8pttf1fl.apps.googleusercontent.com">
+<head>
+</head>
+<body>
+	<div class="g-signin2" data-onsuccess="onSignIn"></div>
+
+<hr>
+
+<div>
+        <img id="user-thumbnail">
+        <span id="user-name"></span><br>
+        <span id="user-email"></span>
+      </div>
+
+<hr>
+
+	<a href="#" onclick="signOut();">Sign out</a>
+
+</body>
+<script type="text/javascript">
+	function onSignIn(googleUser) {
+  var profile = googleUser.getBasicProfile();
+
+  // auth2 is initialized with gapi.auth2.init() and a user is signed in.
+var auth2 = gapi.auth2.getAuthInstance();
+var id_token = googleUser.getAuthResponse().id_token;
+
+if (auth2.isSignedIn.get()) {
+  var profile = auth2.currentUser.get().getBasicProfile();
+  console.log('ID: ' + profile.getId());
+  console.log('Full Name: ' + profile.getName());
+  console.log('Given Name: ' + profile.getGivenName());
+  console.log('Family Name: ' + profile.getFamilyName());
+  console.log('Image URL: ' + profile.getImageUrl());
+  console.log('Email: ' + profile.getEmail());
+
+ $('#user-name').text(profile.getName());
+ $('#user-thumbnail').attr('src',profile.getImageUrl());
+ $('#user-email').text(profile.getEmail());
+
+  }
+}
+
+function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    });
+  }
+</script>
+</html>
