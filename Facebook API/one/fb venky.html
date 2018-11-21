@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="UTF-8">
+<style type="text/css">
+	#basic_response
+	{
+		height: 300px;
+		border:1px solid black;
+	}
+	#status
+	{
+		height: 200px;
+		border:1px solid black;
+	}
+</style>
+</head>
+<body>
+<script>
+
+//BASIC SETUP FB INIT METHOD
+window.fbAsyncInit = function() {
+    FB.init({
+      appId      : '286255478380677',
+      xfbml      : true,
+      status      : true,
+      cookie      : true,
+      version    : 'v2.8'
+    });
+    FB.AppEvents.logPageView();
+  };
+
+  (function(d, s, id){
+     var js, fjs = d.getElementsByTagName(s)[0];
+     if (d.getElementById(id)) {return;}
+     js = d.createElement(s); js.id = id;
+     js.src = "//connect.facebook.net/en_US/sdk.js";
+     fjs.parentNode.insertBefore(js, fjs);
+   }(document, 'script', 'facebook-jssdk'));  
+
+
+
+  (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v2.8&appId=286255478380677";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+
+
+//CHECK LOGIN STATE
+	function checkLoginState() {
+    FB.getLoginStatus(function(response) {
+      statusChangeCallback(response);
+    });
+  }
+
+	function statusChangeCallback(response) {
+    	console.log('statusChangeCallback');
+    	console.log(response);
+    if (response.status === 'connected') {
+      testAPI();
+      displayinfo();
+    } 
+    else if (response.status === 'not_authorized') 
+    {
+      document.getElementById('status').innerHTML = 'Please log ' +
+        'into this app.';
+    } 
+    else 
+    {
+      document.getElementById('status').innerHTML = 'Please log ' +
+        'into Facebook.';
+    }
+ 	}
+
+//DEALING WITH FB DATA
+	function testAPI() 
+	{
+    	console.log('TESTAPI METHOD:');
+
+    	FB.api('/me','get',  function(response) {
+      	console.log(response);
+
+      	document.getElementById('basic_response').innerHTML =
+        JSON.stringify(response);
+    }
+    );
+  }
+
+  function displayinfo() {
+    console.log('Welcome!  Fetching your information.... ');
+    FB.api('/me', function(response) {
+      console.log('Successful login for: ' + response.name);
+      document.getElementById('status').innerHTML =
+        'Thanks for logging in, ' + response.name + '!';
+    });
+  }
+
+//CUSTOM SHARE: //CUSTOM SHARE
+  function customshare() {
+  FB.ui({
+    method: 'share',
+    display: 'popup',
+    href: 'http://www.localvenky.com',
+  }, function(response){});
+}
+
+	
+
+	
+
+	
+
+
+
+</script>
+
+
+
+
+<fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
+</fb:login-button>
+
+
+
+
+<hr>
+<br>
+
+<div id="basic_response" >
+</div>
+
+<hr>
+<button id="shareBtn" onclick="customshare()">custom share</button>
+
+
+<hr>
+<div id="status">
+	<h4>CHECK LOGIN STATUS:</h4>
+</div>
+
+</body>
+</html>

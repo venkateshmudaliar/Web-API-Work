@@ -1,0 +1,133 @@
+<!--DEVELOPED BY VENKY-->
+<!DOCTYPE html>
+<html>
+<head>
+<title>Facebook Login JavaScript Example</title>
+<meta charset="UTF-8">
+</head>
+<body>
+<script>
+ 
+  function statusChangeCallback(response) {
+    console.log('statusChangeCallback');
+    //display response, response status and response.authResponse
+    /*
+    RESPOPNSE OBJECT HAS FOLLOWING OBJECTS
+    {
+    status: 'connected',
+    authResponse: {
+        accessToken: '...',
+        expiresIn:'...',
+        signedRequest:'...',
+        userID:'...'
+    }
+}
+    */
+    console.log(response);
+    console.log(response.status);
+    console.log(response.authResponse);
+    
+    if (response.status === 'connected') {
+       var uid = response.authResponse.userID;
+                var accessToken = response.authResponse.accessToken;
+                
+    } 
+    else if (response.status === 'not_authorized') {
+      document.getElementById('status').innerHTML = 'Please log ' +
+        'into this app.';
+    }
+    else {
+      FB.login(function(response) {
+                    if (response.authResponse) {
+                        var uid = response.authResponse.userID;
+                        var accessToken = response.authResponse.accessToken;
+                        
+                    } else {
+                        console.log('User cancelled login or did not fully authorize.');
+                    }
+                }, {scope: 'public_profile,email'});
+    
+    }
+    FB.api('/me', function(response) {
+    console.log(JSON.stringify(response));
+    });
+
+    
+  }
+
+
+  function myFacebookLogin() {
+
+    FB.getLoginStatus(function(response) {
+      statusChangeCallback(response);
+    });
+   
+
+
+  }
+
+  window.fbAsyncInit = function() {
+  FB.init({
+    appId      : '286255478380677',
+    cookie     : true,  // enable cookies to allow the server to access 
+                        // the session
+    xfbml      : true,  // parse social plugins on this page
+    version    : 'v2.5' // use graph api version 2.5
+  });
+
+
+  FB.getLoginStatus(function(response) {
+    statusChangeCallback(response);
+  });
+
+  };
+
+  
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/sdk.js";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+
+ /*
+  function testAPI() {
+    console.log('Welcome!  Fetching your information.... ');
+
+    FB.api('/me', function(response) {
+      
+     console.log(JSON.stringify(response));
+      document.getElementById('status').innerHTML =
+        'Thanks for logging in, ' + response.name + '!';
+    });
+
+  }
+*/
+
+/* // Note: The call will only work if you accept the permission request
+  FB.api('/me/feed', 'post', {message: 'Hello, world!'});
+}, {scope: 'publish_actions'});*/
+
+</script>
+
+
+
+
+<hr>
+
+<button onclick="myFacebookLogin()">Login with Facebook</button>
+
+
+  
+
+
+
+
+
+<hr>
+
+<div id="status"></div>
+
+</body>
+</html>
